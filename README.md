@@ -1,4 +1,5 @@
 # Ruby-Effects
+[![Build Status](https://travis-ci.org/timhabermaas/ruby-effects.svg?branch=master)](https://travis-ci.org/timhabermaas/ruby-effects)
 
 Ruby-Effects is a Ruby implementation of the [`freer` Haskell package](https://hackage.haskell.org/package/freer). The general idea is to represent effects as values and use interpreters to translate these effects into actual side-effects. See the paper [Freer Monads, More Extensible Effects](http://okmij.org/ftp/Haskell/extensible/more.pdf) for details.
 
