@@ -15,20 +15,15 @@ module Http
   end
 
   def self.run(effect)
-    case effect
-    when Eff::Impure
-      if effect.v.class == Http::Get
+    Eff::EffectHandler.new
+      .on_impure(Http::Get) do |request, k|
         conn = Faraday.new(:url => 'http:/') do |faraday|
           faraday.adapter Faraday.default_adapter
         end
-        result = conn.get effect.v.url
-        run(effect.k.call(JSON.parse(result.body)))
-      else
-        Eff::Impure.new(effect.v, -> (x) { run(effect.k.call(x)) })
+        result = conn.get request.url
+        k.call(JSON.parse(result.body))
       end
-    when Eff::Pure
-      effect
-    end
+      .run(effect)
   end
 
   def self.run_cached(effect, cache=[])
