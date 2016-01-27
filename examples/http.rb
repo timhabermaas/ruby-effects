@@ -5,6 +5,8 @@ require 'eff'
 require 'json'
 require 'faraday'
 
+require_relative './tty'
+
 module Http
   Get = Struct.new(:url)
 
@@ -88,7 +90,7 @@ module Github
   end
 end
 
-def report_for(name)
+def user_report_for(name)
   Github.get_repo_count(name).bind do |count|
     Github.get_location(name).bind do |location|
       Eff::FEFree.return "location: #{location}, repo count: #{count}"
@@ -96,8 +98,28 @@ def report_for(name)
   end
 end
 
-# Running the report calls the same GitHub endpoint twice.
-puts Eff.run(Http.run(Github.run(report_for(ARGV.first))))
+def print_report(name)
+  user_report_for(name).bind do |string|
+    TTY.put string
+  end
+end
+
+def map_m(monad_type, array)
+  monad = monad_type.return(nil)
+  array.each do |e|
+    monad = monad >> yield(e)
+  end
+  monad
+end
+
+def print_reports(names)
+  map_m(Eff::FEFree, names) do |name|
+    print_report(name)
+  end
+end
+
+# Printing the report calls the same GitHub endpoint twice.
+Eff.run(Http.run(Github.run(TTY.run_io(print_reports(ARGV)))))
 
 # Simply replacing the Http effect handler with a cached version avoids this problem.
-# puts Eff.run(Http.run_cached(Github.run(report_for(ARGV.first))))
+Eff.run(Http.run_cached(Github.run(TTY.run_io(print_reports(ARGV)))))
