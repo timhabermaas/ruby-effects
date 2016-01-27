@@ -1,4 +1,5 @@
 require 'eff'
+require 'eff/effect_handler'
 
 module TTY
   def self.put(s)
@@ -15,9 +16,14 @@ module TTY
   end
 
   def self.run_io(eff)
-    Eff.handle_relay(Eff::FEFree.public_method(:return),
-                    {TTY::Put => ->(p, k) { puts p.string; k.call(nil) },
-                     TTY::Get => ->(g, k) { line = gets.chomp; k.call(line)}}).call(eff)
+    Eff::EffectHandler.new
+      .on_impure(TTY::Put) { |p, k|
+        puts p.string; k.call(nil)
+      }
+      .on_impure(TTY::Get) { |g, k|
+        line = STDIN.gets.chomp; k.call(line)
+      }
+      .run(eff)
   end
 
   def self.run_simulated(answers, eff, outputs=[])
@@ -36,16 +42,3 @@ module TTY
     end
   end
 end
-
-program = TTY.put("What's your name?").bind do
-  TTY.get.bind do |name|
-    TTY.put("What's your age?").bind do
-      TTY.get.bind do |age|
-        TTY.put("Hi #{name}, you are #{age} years old.")
-      end
-    end
-  end
-end
-
-Eff.run(TTY.run_io(program))
-p Eff.run(TTY.run_simulated(["peter", "12"], program))

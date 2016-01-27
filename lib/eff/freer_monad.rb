@@ -3,6 +3,12 @@ module Eff
     def self.return(x)
       Pure.new(x)
     end
+
+    def >>(other)
+      self.bind do |_|
+        other
+      end
+    end
   end
 
   class Pure < FEFree
