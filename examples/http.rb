@@ -66,22 +66,18 @@ module Github
   end
 
   def self.run(effect)
-    case effect
-    when Eff::Impure
-      if effect.v.class == Github::GetLocation
-        run(Http.get("https://api.github.com/users/#{effect.v.user_id}").bind do |result|
-          effect.k.call(result["location"])
-        end)
-      elsif effect.v.class == Github::GetRepoCount
-        run(Http.get("https://api.github.com/users/#{effect.v.user_id}").bind do |result|
-          effect.k.call(result["public_repos"])
-        end)
-      else
-        Eff::Impure.new(effect.v, -> (x) { run(effect.k.call(x)) })
+    Eff::EffectHandler.new
+      .on_impure(Github::GetLocation) do |request, k|
+        Http.get("https://api.github.com/users/#{request.user_id}").bind do |result|
+          k.call(result["location"])
+        end
       end
-    when Eff::Pure
-      effect
-    end
+      .on_impure(Github::GetRepoCount) do |request, k|
+        Http.get("https://api.github.com/users/#{request.user_id}").bind do |result|
+          k.call(result["public_repos"])
+        end
+      end
+      .run(effect)
   end
 end
 
