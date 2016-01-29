@@ -1,5 +1,5 @@
-# Ruby-Effects
-[![Build Status](https://travis-ci.org/timhabermaas/ruby-effects.svg?branch=master)](https://travis-ci.org/timhabermaas/ruby-effects)
+# ruby_effects
+[![Build Status](https://travis-ci.org/timhabermaas/ruby_effects.svg?branch=master)](https://travis-ci.org/timhabermaas/ruby_effects)
 
 Ruby-Effects is a Ruby implementation of the [`freer` Haskell package](https://hackage.haskell.org/package/freer). The general idea is to represent effects as values and use interpreters to translate these effects into actual side-effects. See the paper [Freer Monads, More Extensible Effects](http://okmij.org/ftp/Haskell/extensible/more.pdf) for details.
 
@@ -15,7 +15,7 @@ This will hopefully change since I believe the underlying idea(s) are worth expl
 Add this line to your application's Gemfile:
 
 ```ruby
-gem 'ruby-effects'
+gem 'ruby_effects'
 ```
 
 And then execute:
@@ -24,7 +24,7 @@ And then execute:
 
 Or install it yourself as:
 
-    $ gem install ruby-effects
+    $ gem install ruby_effects
 
 
 ## Usage
@@ -33,7 +33,7 @@ TODO Explain how to create custom effects and custom handlers.
 
 ### Examples
 
-To get a feel for how code using ruby-effects might look like, take a look at the `examples/` directory.
+To get a feel for how code using `ruby_effects` might look like, take a look at the `examples/` directory.
 
 * `examples/tty.rb` shows how to represent STDIN and STDOUT as effects. It also includes two different effect handlers: `TTY.run_io` maps to Ruby's `puts` and `gets` and `TTY.run_simulated` is pure by getting a list of inputs and returning a list of outputs. `run_simulated` could be used for testing.
 * `examples/http.rb` is a more involved example which uses a GitHub DSL to represent queries. These queries are then translated to HTTP effects which are then translated to actual HTTP requests. The `Http.run_cached` effect handler is particularly noteworthy: Caching can be accomplished without changing the implementation of `report_for`.
@@ -57,7 +57,7 @@ For example: You could add logging and caching to your effect handlers without p
 
 ## Contributing
 
-Bug reports and pull requests are welcome on GitHub at https://github.com/timhabermaas/ruby-effects.
+Bug reports and pull requests are welcome on GitHub at https://github.com/timhabermaas/ruby_effects.
 
 
 ## License

@@ -4,14 +4,14 @@ $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
 require 'eff/version'
 
 Gem::Specification.new do |spec|
-  spec.name          = "ruby-effects"
+  spec.name          = "ruby_effects"
   spec.version       = Eff::VERSION
   spec.authors       = ["Tim Habermaas"]
   spec.email         = ["t.habermaas@gmail.com"]
 
   spec.summary       = %q{Ruby implementation of Freer Monads/More extensible effects}
   spec.description   = %q{Ruby implementation of Freer Monads/More extensible effects}
-  spec.homepage      = "https://github.com/timhabermaas/ruby-effects"
+  spec.homepage      = "https://github.com/timhabermaas/ruby_effects"
   spec.license       = "MIT"
 
   # Prevent pushing this gem to RubyGems.org by setting 'allowed_push_host', or

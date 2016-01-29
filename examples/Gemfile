@@ -1,4 +1,4 @@
 source 'https://rubygems.org'
 
 gem 'faraday'
-gem 'ruby-effects', path: '../'
+gem 'ruby_effects', path: '../'

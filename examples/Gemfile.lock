@@ -1,7 +1,7 @@
 PATH
   remote: ../
   specs:
-    ruby-effects (0.1.0)
+    ruby_effects (0.1.0)
 
 GEM
   remote: https://rubygems.org/
@@ -15,7 +15,7 @@ PLATFORMS
 
 DEPENDENCIES
   faraday
-  ruby-effects!
+  ruby_effects!
 
 BUNDLED WITH
    1.11.2
