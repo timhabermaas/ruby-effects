@@ -195,7 +195,7 @@ For example: You could add logging and caching to your effect handlers at the bo
 ## Caveats
 
 *No do notation*: There's no do notation in Ruby to get rid of the nested `bind` calls which remind one of callback hell. There exists [`do_notation`](https://github.com/aanand/do_notation), but it is no longer maintained. Using [`method_source`](https://github.com/banister/method_source) in combination with [`ruby_parser`](https://github.com/seattlerb/ruby_parser) might be an alternative to get the same features. I'm currently working on it at [`ruby_monad`](https://github.com/timhabermaas/ruby_monad).
-
+*Performance*: It's pretty slow right now for a large number of chained effects.
 
 ## Contributing
 

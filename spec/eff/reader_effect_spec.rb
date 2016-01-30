@@ -10,9 +10,11 @@ RSpec.describe "reader effect" do
     end
 
     def self.run(context, effect)
-      Eff.handle_relay(-> (e) { Eff::Freer.return e },
-                       { ReaderEff::Reader => -> (r, k) {k.call(context)} }
-                      )[effect]
+      Eff::EffectHandler.new
+        .on_impure(ReaderEff::Reader) do |r, k|
+          k.call(context)
+        end
+        .run(effect)
     end
   end
 
