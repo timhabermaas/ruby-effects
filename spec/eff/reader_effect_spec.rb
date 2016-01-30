@@ -10,7 +10,7 @@ RSpec.describe "reader effect" do
     end
 
     def self.run(context, effect)
-      Eff.handle_relay(-> (e) { Eff::FEFree.return e },
+      Eff.handle_relay(-> (e) { Eff::Freer.return e },
                        { ReaderEff::Reader => -> (r, k) {k.call(context)} }
                       )[effect]
     end
@@ -27,7 +27,7 @@ RSpec.describe "reader effect" do
   end
 
   context "given program which multiplies context" do
-    let(:program) { ReaderEff::ask.bind { |e| Eff::FEFree.return(e * 2) } }
+    let(:program) { ReaderEff::ask.bind { |e| Eff::Freer.return(e * 2) } }
 
     it "behaves like the (* 2) function" do
       expect(run[10]).to eq 20

@@ -1,5 +1,5 @@
 module Eff
-  class FEFree
+  class Freer
     def self.return(x)
       Pure.new(x)
     end
@@ -11,7 +11,7 @@ module Eff
     end
   end
 
-  class Pure < FEFree
+  class Pure < Freer
     attr_reader :value
 
     def initialize(value)
@@ -23,7 +23,7 @@ module Eff
     end
   end
 
-  class Impure < FEFree
+  class Impure < Freer
     attr_reader :v, :k
 
     def initialize(v, k)

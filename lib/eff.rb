@@ -34,3 +34,5 @@ module Eff
     end
   end
 end
+
+require 'eff/effect_handler'

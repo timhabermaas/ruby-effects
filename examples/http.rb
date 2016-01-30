@@ -84,7 +84,7 @@ end
 def user_report_for(name)
   Github.get_repo_count(name).bind do |count|
     Github.get_location(name).bind do |location|
-      Eff::FEFree.return "location: #{location}, repo count: #{count}"
+      Eff::Freer.return "location: #{location}, repo count: #{count}"
     end
   end
 end
@@ -104,7 +104,7 @@ def map_m(monad_type, array)
 end
 
 def print_reports(names)
-  map_m(Eff::FEFree, names) do |name|
+  map_m(Eff::Freer, names) do |name|
     print_report(name)
   end
 end

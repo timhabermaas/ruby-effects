@@ -1,5 +1,4 @@
 require 'eff'
-require 'eff/effect_handler'
 
 module TTY
   def self.put(s)
@@ -38,7 +37,7 @@ module TTY
         Eff::Impure.new(eff.v, -> (x) { run_simulated(eff.k.call(x)) })
       end
     when Eff::Pure
-      Eff::FEFree.return outputs
+      Eff::Freer.return outputs
     end
   end
 end

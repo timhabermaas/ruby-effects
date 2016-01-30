@@ -2,7 +2,7 @@ module Eff
   class EffectHandler
     def initialize
       @impure_handlers = {}
-      @pure_handler = FEFree.public_method(:return)
+      @pure_handler = Freer.public_method(:return)
     end
 
     def on_impure(klass, &block)
