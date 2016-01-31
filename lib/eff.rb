@@ -12,8 +12,7 @@ module Eff
     when Pure
       eff.value
     else
-      # TODO list unhandled effects
-      raise "not all effects have been handled"
+      raise "Effect #{eff.v} has not been handled. Are you missing an effect handler in your chain?"
     end
   end
 end
