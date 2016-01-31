@@ -1,6 +1,6 @@
-require 'eff/freer_monad'
-require 'eff/ftc_queue'
-require 'eff/effect_handler'
+require "eff/freer_monad"
+require "eff/ftc_queue"
+require "eff/effect_handler"
 
 module Eff
   def self.send(effect)

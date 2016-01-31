@@ -1,4 +1,5 @@
-require 'eff/view_l'
+require "eff/view_l"
+require "eff/freer_monad"
 
 module Eff
   class FTCQueue
@@ -9,6 +10,7 @@ module Eff
     def snoc(f)
       Node.new(self, Leaf.new(f))
     end
+    alias_method :>>, :snoc
 
     def qcomp(f)
       lambda { |x| f.call(self.qapp(x)) }
