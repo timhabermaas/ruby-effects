@@ -31,7 +31,7 @@ module Eff
     end
 
     def bind(&block)
-      Impure.new @v, -> (x) { @k.call(x).bind(&block) }
+      Impure.new @v, @k.snoc(block)
     end
   end
 end

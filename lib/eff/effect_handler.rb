@@ -21,20 +21,21 @@ module Eff
 
     private
     def handle_relay(ret, impure_hash)
-      _loop = lambda do |eff, ret, impure_hash|
+      _loop = lambda do |ret, impure_hash, eff|
         case eff
         when Impure
           if impure_hash.key?(eff.v.class)
-            _loop.call(impure_hash.fetch(eff.v.class).call(eff.v, eff.k), ret, impure_hash)
+            _loop.call(ret, impure_hash, impure_hash.fetch(eff.v.class).call(eff.v, eff.k))
           else
-            Eff::Impure.new(eff.v, -> (x) { _loop.call(eff.k.call(x), ret, impure_hash) })
+            k = eff.k.qcomp(lambda { |e| _loop.call(ret, impure_hash, e) })
+            Impure.new(eff.v, FTCQueue.singleton(k))
           end
         when Pure
           ret.call(eff.value)
         end
       end
       lambda do |eff|
-        _loop.call(eff, ret, impure_hash)
+        _loop.call(ret, impure_hash, eff)
       end
     end
   end

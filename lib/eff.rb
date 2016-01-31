@@ -1,8 +1,10 @@
 require 'eff/freer_monad'
+require 'eff/ftc_queue'
+require 'eff/effect_handler'
 
 module Eff
   def self.send(effect)
-    Impure.new(effect, -> (x) { Pure.new(x) })
+    Impure.new(effect, FTCQueue.singleton(-> (x) { Pure.new(x) }))
   end
 
   def self.run(eff)
@@ -15,5 +17,3 @@ module Eff
     end
   end
 end
-
-require 'eff/effect_handler'
