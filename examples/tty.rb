@@ -26,18 +26,17 @@ module TTY
   end
 
   def self.run_simulated(answers, eff, outputs=[])
-    case eff
-    when Eff::Impure
-      if eff.v.class == Get
-        raise "not enough answers provided" if answers.empty?
-        run_simulated(answers[1..-1], eff.k.call(answers.first), outputs)
-      elsif eff.v.class == Put
-        run_simulated(answers, eff.k.call(nil), outputs + [eff.v.string])
-      else
-        Eff::Impure.new(eff.v, -> (x) { run_simulated(eff.k.call(x)) })
+    Eff::EffectHandler.with_state
+      .on_impure(TTY::Get) do |p, k, s|
+        raise "not enough answers provided" if s[:answers].empty?
+        [k.call(s[:answers].first), s.merge(answers: s[:answers][1..-1])]
       end
-    when Eff::Pure
-      Eff::Freer.return outputs
-    end
+      .on_impure(TTY::Put) do |g, k, s|
+        [k.call(nil), s.merge(outputs: s[:outputs] + [g.string])]
+      end
+      .on_pure do |_, s|
+        Eff::Freer.return s[:outputs]
+      end
+      .run(eff, {answers: answers, outputs: outputs})
   end
 end

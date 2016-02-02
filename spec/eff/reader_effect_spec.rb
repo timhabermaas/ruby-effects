@@ -21,7 +21,7 @@ RSpec.describe "reader effect" do
   let(:run) { -> (input) { Eff.run(ReaderEff.run(input, program)) } }
 
   context "given simple ask program" do
-    let(:program) { ReaderEff::ask }
+    let(:program) { ReaderEff.ask }
 
     it "behaves like the identity function" do
       expect(run[10]).to eq 10
@@ -29,7 +29,7 @@ RSpec.describe "reader effect" do
   end
 
   context "given program which multiplies context" do
-    let(:program) { ReaderEff::ask.bind { |e| Eff::Freer.return(e * 2) } }
+    let(:program) { ReaderEff.ask.bind { |e| Eff::Freer.return(e * 2) } }
 
     it "behaves like the (* 2) function" do
       expect(run[10]).to eq 20

@@ -18,24 +18,20 @@ module RE
   end
 
   def self.run_with_hash(hash, effect)
-    # Clone hash since we mutate it in
-    # the following code.
-    hash = hash.clone
-    Eff::EffectHandler.new
-      .on_impure(Get) do |g, k|
-        value = hash[g.key]
-        k.call(value)
+    Eff::EffectHandler.with_state
+      .on_impure(Get) do |g, k, state|
+        value = state[g.key]
+        [k.call(value), state]
       end
-      .on_impure(Set) do |s, k|
-        hash[s.key] = s.value.to_s
-        k.call(nil)
+      .on_impure(Set) do |s, k, state|
+        [k.call(nil), hash.merge(s.key => s.value.to_s)]
       end
-      .on_pure do |value|
+      .on_pure do |value, state|
         # Return the value and the new
         # state.
-        Eff::Freer.return [value, hash]
+        Eff::Freer.return [value, state]
       end
-      .run(effect)
+      .run(effect, hash)
   end
 
   def self.run_with_redis(redis, effect)
